@@ -111,13 +111,16 @@ class DynamicWidgetBuilder {
     }
   }
 
-  static Widget? build(
-      String json, BuildContext buildContext, ClickListener listener) {
+  static Widget build(String json, BuildContext buildContext,
+      ClickListener listener) {
     initDefaultParsersIfNess();
     var map = jsonDecode(json);
     ClickListener _listener =
-        listener == null ? new NonResponseWidgetClickListener() : listener;
+    listener == null ? new NonResponseWidgetClickListener() : listener;
     var widget = buildFromMap(map, buildContext, _listener);
+    if (widget == null) {
+      return const Text("NullWidget");
+    }
     return widget;
   }
 
@@ -152,8 +155,8 @@ class DynamicWidgetBuilder {
     return rt;
   }
 
-  static Map<String, dynamic>? export(
-      Widget? widget, BuildContext? buildContext) {
+  static Map<String, dynamic>? export(Widget? widget,
+      BuildContext? buildContext) {
     initDefaultParsersIfNess();
     var parser = _findMatchedWidgetParserForExport(widget);
     if (parser != null) {
@@ -164,8 +167,8 @@ class DynamicWidgetBuilder {
     return null;
   }
 
-  static List<Map<String, dynamic>?> exportWidgets(
-      List<Widget?> widgets, BuildContext? buildContext) {
+  static List<Map<String, dynamic>?> exportWidgets(List<Widget?> widgets,
+      BuildContext? buildContext) {
     initDefaultParsersIfNess();
     List<Map<String, dynamic>?> rt = [];
     for (var widget in widgets) {
